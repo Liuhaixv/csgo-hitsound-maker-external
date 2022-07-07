@@ -38,7 +38,7 @@ public:
 
 	bool hit(bool enable_when_spectate = false) {
 		static int oldDamage = 0;
-		static int last_spect_id = 0;
+		static int last_spect_id = local_player.get_observer_target();
 
 		PlayerEntity* player;
 		if (!enable_when_spectate) {
@@ -56,8 +56,8 @@ public:
 				}
 
 				//获取被旁观的玩家
-				player = &PlayerEntity(memory, memory->read_mem<DWORD>(memory->clientBaseAddr + signatures::dwEntityList + (short)0x10 * (spect_id-1)));
-				
+				player = &PlayerEntity(memory, memory->read_mem<DWORD>(memory->clientBaseAddr + signatures::dwEntityList + (short)0x10 * (spect_id - 1)));
+
 				//切换旁观人物
 				if (spect_id != last_spect_id) {
 					last_spect_id = spect_id;
@@ -72,9 +72,13 @@ public:
 			}
 		}
 
-		if (!player->get_health()) {
+		if (!player->valid_player()) {
 			return false;
 		}
+
+		//std::cout << "player health:" << player->get_health() <<std::endl;
+		//std::cout << "old damage:" << oldDamage << std::endl;
+		//std::cout << "damage:" << player->get_round_deald_damage() << std::endl;
 
 		int damage = player ->get_round_deald_damage();
 
@@ -96,7 +100,7 @@ public:
 
 	bool kill(bool enable_when_spectate = false) {
 		static int oldKillNum = 0;
-		static int last_spect_id = 0;
+		static int last_spect_id = local_player.get_observer_target();
 
 		PlayerEntity* player;
 		if (!enable_when_spectate) {
@@ -130,7 +134,7 @@ public:
 			}
 		}
 
-		if (!player->get_health()) {
+		if (!player->valid_player()) {
 			return false;
 		}
 
@@ -155,7 +159,7 @@ public:
 
 	bool flash(bool enable_when_spectate = false) {
 		static int oldFlashNum = 0;
-		static int last_spect_id = 0;
+		static int last_spect_id = local_player.get_observer_target();
 
 		PlayerEntity* player;
 		if (!enable_when_spectate) {
@@ -189,7 +193,7 @@ public:
 			}
 		}
 
-		if (!player->get_health()) {
+		if (!player->valid_player()) {
 			return false;
 		}
 

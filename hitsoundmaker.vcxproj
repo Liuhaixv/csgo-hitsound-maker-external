@@ -116,6 +116,9 @@
     <ClInclude Include="signatures.hpp" />
     <ClInclude Include="misc\xor.hpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Release\hitsoundmaker.exe" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
