@@ -221,7 +221,7 @@ public:
 	}
 
 	void flashsound() {
-		PlaySound(("hit.wav"), NULL, SND_ASYNC);
+		PlaySound(("flash.wav"), NULL, SND_ASYNC);
 	}
 	
 	//enable_when_spectate 旁观时是否启用
