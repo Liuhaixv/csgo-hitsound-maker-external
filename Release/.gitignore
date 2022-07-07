@@ -1,3 +1,6 @@
 *
 */
 !.gitignore
+!flash.wav
+!hit.wav
+!kill.wav
