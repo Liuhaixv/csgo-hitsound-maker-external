@@ -84,7 +84,7 @@ public:
 			std::cout << std::endl<<"====================="<<std::endl;
 		}
 		else {
-			if (damage > oldDamage)
+			if (damage > oldDamage && (damage - oldDamage < 500))
 			{
 				std::cout << "damage:" << oldDamage <<" + " <<damage -oldDamage<<" = " <<damage<< std::endl;
 				oldDamage = damage;
@@ -142,7 +142,7 @@ public:
 		}
 
 		else {
-			if (killNum > oldKillNum)
+			if (killNum > oldKillNum && ((killNum - oldKillNum < 500)))
 			{
 				oldKillNum = killNum;				
 				std::cout << "kills:" << killNum << std::endl;
@@ -201,7 +201,7 @@ public:
 		}
 
 		else {
-			if (flashedNums > oldFlashNum)
+			if (flashedNums > oldFlashNum && ( flashedNums - oldFlashNum < 500))
 			{
 				oldFlashNum = flashedNums;
 				std::cout << "flashed enemies' num:" << flashedNums << std::endl;
