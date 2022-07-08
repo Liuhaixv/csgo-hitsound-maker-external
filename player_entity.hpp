@@ -88,8 +88,14 @@ public:
 	inline int get_round_hit_times() {
 		return memory->read_mem<int>(playerBaseAddr + netvars::m_iRoundHitTimes);
 	}
+
 	inline int get_round_kill_num() {
 		return memory->read_mem<int>(playerBaseAddr + netvars::m_iRoundKillNum);
+	}
+
+	inline int get_round_headshot_kill_num() {
+		int current_round_index = get_round_index();
+		return memory->read_mem<int>(playerBaseAddr + netvars::headshotKilledEnemiesAtFirstRound + current_round_index * 0x4);
 	}
 
 	inline int get_round_deald_damage() {

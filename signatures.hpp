@@ -78,8 +78,10 @@ namespace hazedumper {
 		constexpr ::std::ptrdiff_t m_iGlowIndex = 0x10488;
 		constexpr ::std::ptrdiff_t m_iHealth = 0x100;
 
-		//get_flashed_enemies(round n) => read(player + m_iFlashedEnemiesNumAtFirstRound + (n-1) * 0x4)
+		//get_flashed_enemies(roundindex i) => read(player + m_iFlashedEnemiesNumAtFirstRound + i * 0x4)
 		constexpr ::std::ptrdiff_t m_iFlashedEnemiesNumAtFirstRound = 0x10a54;
+		constexpr ::std::ptrdiff_t headshotKilledEnemiesAtFirstRound = 0x10874;
+
 		constexpr ::std::ptrdiff_t m_iRoundHitTimes = 0x11c70;
 		constexpr ::std::ptrdiff_t m_iRoundHitDamagedTimes = 0x0;
 		constexpr ::std::ptrdiff_t m_iRoundDealdDamageTotal = 0x99a8;

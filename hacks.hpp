@@ -2,12 +2,16 @@
 #define HACKS_HPP
 #pragma once
 
+#include <algorithm>
+#include<random>
 #include<mmsystem.h>
 #include "client.hpp"
 #include "player_entity.hpp"
 #include <iostream>
+#include<filesystem>
 
 using namespace hazedumper;
+namespace fs = std::filesystem;
 
 struct GlowStruct {
 	BYTE base[8];
@@ -98,8 +102,15 @@ public:
 		return false;
 	}
 
-	bool kill(bool enable_when_spectate = false) {
+	/*
+	return:
+		0 not killed
+		1 normal kill
+		2 headshot kill 
+	*/
+	int kill(bool enable_when_spectate = false) {
 		static int oldKillNum = 0;
+		static int oldHeadShotKillNum = 0;
 		static int last_spect_id = local_player.get_observer_target();
 
 		PlayerEntity* player;
@@ -125,7 +136,8 @@ public:
 					last_spect_id = spect_id;
 					//初始化数据
 					oldKillNum = player->get_round_kill_num();
-					return false;
+					oldHeadShotKillNum = player->get_round_headshot_kill_num();
+					return 0;
 				}
 			}
 			else {
@@ -143,18 +155,29 @@ public:
 		//round start or restart reset the killnum
 		if (oldKillNum > killNum || killNum == 0) {
 			oldKillNum = 0;
+			oldHeadShotKillNum = 0;
 		}
 
 		else {
 			if (killNum > oldKillNum && ((killNum - oldKillNum < 500)))
 			{
-				oldKillNum = killNum;				
+				oldKillNum = killNum;		
+
+				//wait for headshot kill data been updated
+				Sleep(20);
+				int headshot_killNum = player->get_round_headshot_kill_num();
+				if (headshot_killNum > oldHeadShotKillNum) {
+					oldHeadShotKillNum = headshot_killNum;
+					std::cout << "kills:" << killNum <<" (that was a headshot kill)" << std::endl;
+					return 2;
+				}
+				std::cout << "headshot_kill" << headshot_killNum << std::endl;
 				std::cout << "kills:" << killNum << std::endl;
-				return true;
+				return 1;
 			}
 		}
 
-		return false;
+		return 0;
 	}
 
 	//this may not be functioning 
@@ -217,40 +240,130 @@ public:
 		return false;
 	}
 
-	void hitsound() {
-		PlaySound(("hit.wav"), NULL, SND_ASYNC);
+	void shuffle_vector(std::vector<std::string>& vector) {
+		std::random_device rd;
+		std::shuffle(vector.begin(), vector.end(), rd);
 	}
 
-	void killsound() {
-		PlaySound(("kill.wav"), NULL, SND_ASYNC);
+	void hit_sound(std::string filename) {
+		PlaySound(((std::string(".\\sounds\\hit\\") + filename).c_str()), NULL, SND_ASYNC);
 	}
 
-	void flashsound() {
-		PlaySound(("flash.wav"), NULL, SND_ASYNC);
+	void hit_sound(std::vector<std::string>& filenames) {
+		shuffle_vector(filenames);
+		PlaySound(((std::string(".\\sounds\\hit\\") + filenames.front()).c_str()), NULL, SND_ASYNC);
+	}
+
+	void kill_sound(std::string filename) {
+		PlaySound(((std::string(".\\sounds\\kill\\") + filename).c_str()), NULL, SND_ASYNC);
+	}	
+	
+	void kill_sound(std::vector<std::string>& filenames) {
+		shuffle_vector(filenames);
+		PlaySound(((std::string(".\\sounds\\kill\\") + filenames.front()).c_str()), NULL, SND_ASYNC);
+	}
+
+	void headshotkill_sound(std::string filename) {
+		PlaySound(((std::string(".\\sounds\\headhshot_kill\\") + filename).c_str()), NULL, SND_ASYNC);
+	}
+
+	void headshotkill_sound(std::vector<std::string>& filenames) {
+		shuffle_vector(filenames);
+		PlaySound(((std::string(".\\sounds\\headshot_kill\\") + filenames.front()).c_str()), NULL, SND_ASYNC);
+	}
+
+	void headshot_hit_sound(std::string filename) {
+		PlaySound(((std::string(".\\sounds\\headshot_hit\\") + filename).c_str()), NULL, SND_ASYNC);
+	}	
+	
+	void headshot_hit_sound(std::vector<std::string>& filenames) {
+		shuffle_vector(filenames);
+		PlaySound(((std::string(".\\sounds\\headshot_hit\\") + filenames.front()).c_str()), NULL, SND_ASYNC);
+	}
+
+	void flash_sound(std::string filename) {
+		PlaySound(((std::string(".\\sounds\\flash\\") + filename).c_str()), NULL, SND_ASYNC);
+	}
+	
+	void flash_sound(std::vector <std::string>& filenames) {
+		shuffle_vector(filenames);
+		PlaySound(((std::string(".\\sounds\\flash\\") + filenames.front()).c_str()), NULL, SND_ASYNC);
+	}
+
+	void get_all_wav_files(std::string path, std::vector<std::string>& sound_files_container) {
+		try{
+			for (const auto& entry : fs::directory_iterator(path)) {
+				static std::string suffix = std::string(".wav");
+
+				std::string filename = entry.path().filename().string();
+
+				bool has_suffix = filename.find(suffix, filename.size() - suffix.size()) != std::string::npos;
+				if (has_suffix) {
+					sound_files_container.push_back(filename);
+				}
+			}
+		}
+		catch (const std::exception& ex){
+
+		}
+	}
+
+	void init_sounds_files(
+		std::vector<std::string>& hit_sound_files,
+		std::vector<std::string>& kill_sound_files,
+		std::vector<std::string>& headshotkill_sound_files,
+		//TODO headshot_hit_sound_files
+		std::vector<std::string>& headshot_hit_sound_files,
+		std::vector<std::string>& flash_sound_files) {
+		get_all_wav_files("./sounds/hit", hit_sound_files);
+		get_all_wav_files("./sounds/kill",kill_sound_files);
+		get_all_wav_files("./sounds/headshot_kill",headshotkill_sound_files);
+		get_all_wav_files("./sounds/headshot_hit",headshot_hit_sound_files);
+		get_all_wav_files("./sounds/flash",flash_sound_files);
 	}
 	
 	//enable_when_spectate 旁观时是否启用
 	void thread_hitmaker(hacks_state* state, bool enable_when_spectate) {
+		static std::vector<std::string> hit_sound_files;
+		static std::vector<std::string> kill_sound_files;
+		static std::vector<std::string> headshotkill_sound_files;
+		static std::vector<std::string> headshot_hit_sound_files;
+		static std::vector<std::string> flash_sound_files;
+
+		init_sounds_files(hit_sound_files,
+							kill_sound_files,
+							headshotkill_sound_files,
+							headshot_hit_sound_files,
+							flash_sound_files);
+
+
 		while (true) {
 			if (state->game) {
 				bool hitted = false;
-				bool killed = false;
+				int killed = false;
 				bool flashedEnemy = false;
 				hitted = hit(enable_when_spectate);
 				killed = kill(enable_when_spectate);
 				flashedEnemy = flash(enable_when_spectate);
-				if (killed) {
-					killsound();
+				if (killed!=0) {
+					if (killed == 1) {
+
+						kill_sound(kill_sound_files);
+					}
+					else if (killed == 2) {
+						headshotkill_sound(headshotkill_sound_files);
+					}
+
 					Sleep(10);
 					continue;
 				}
 				if (hitted) {
-					hitsound();
+					hit_sound(hit_sound_files);
 					Sleep(10);
 					continue;
 				}
 				if (flashedEnemy) {
-					flashsound();
+					flash_sound(flash_sound_files);
 					Sleep(10);
 					continue;
 				}
