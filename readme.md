@@ -12,7 +12,7 @@ CSGO sound based external cheat
 
 
 ## Known Issues
-kill sound or hit sound played when changing spectated player
+~~kill sound or hit sound played when changing spectated player~~
 
 ~~Method which detects whether enemies are flashed may not work~~
 
