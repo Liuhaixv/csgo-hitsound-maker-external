@@ -8,7 +8,7 @@ CSGO sound based external cheat
 
 2.Play sound "kill.wav" when you killed enemy.
 
-3.**(not working)** Play sound "falsh.wav" when falshed enemy.
+3.Play sound "falsh.wav" when falshed enemy.
 
 
 ## Known Issues
