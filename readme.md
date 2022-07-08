@@ -10,9 +10,11 @@ CSGO sound based external cheat
 
 3.Play sound "falsh.wav" when falshed enemy.
 
+## Video
+[![IMAGE ALT TEXT](http://img.youtube.com/vi/Q_okx0boOVw/0.jpg)](https://www.youtube.com/watch?v=Q_okx0boOVw&t=42s)
 
 ## Known Issues
-kill sound or hit sound played when changing spectated player
+~~kill sound or hit sound played when changing spectated player~~
 
 ~~Method which detects whether enemies are flashed may not work~~
 
