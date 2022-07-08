@@ -6,6 +6,7 @@
 #include "signatures.hpp"
 #include "player_entity.hpp"
 
+
 using namespace hazedumper;
 
 class Client {
@@ -34,7 +35,7 @@ public:
 
 	PlayerEntity get_local_player() {
 		DWORD player_id = memory->read_mem<DWORD>(_getClientState() + signatures::dwClientState_GetLocalPlayer);
-		return PlayerEntity(memory, memory->read_mem<DWORD>(memory->clientBaseAddr + signatures::dwEntityList + player_id * 0x10));
+		return PlayerEntity(memory,memory->read_mem<DWORD>(memory->clientBaseAddr + signatures::dwEntityList + player_id * 0x10));
 	}
 
 	bool is_dangerzone() {
@@ -63,8 +64,6 @@ public:
 
 		return *reinterpret_cast<float*>(&sens_fn);
 	}
-
-
 };
 
 #endif

@@ -78,18 +78,18 @@ namespace hazedumper {
 		constexpr ::std::ptrdiff_t m_iGlowIndex = 0x10488;
 		constexpr ::std::ptrdiff_t m_iHealth = 0x100;
 
-		//
-		constexpr ::std::ptrdiff_t m_iRoundFlashedEnemiesNum = 0x10a54;
+		//get_flashed_enemies(round n) => read(player + m_iFlashedEnemiesNumAtFirstRound + (n-1) * 0x4)
+		constexpr ::std::ptrdiff_t m_iFlashedEnemiesNumAtFirstRound = 0x10a54;
 		constexpr ::std::ptrdiff_t m_iRoundHitTimes = 0x11c70;
 		constexpr ::std::ptrdiff_t m_iRoundHitDamagedTimes = 0x0;
 		constexpr ::std::ptrdiff_t m_iRoundDealdDamageTotal = 0x99a8;
-		//constexpr ::std::ptrdiff_t  m_iRoundGrenadeAndMolotovDealdDamageTotal = 0x10a14;
+		//constexpr ::std::ptrdiff_t  m_iGrenadeAndMolotovDealdDamageTotalAtFirstRound = 0x10a14;
+		constexpr ::std::ptrdiff_t m_iRoundKillNum = 0x99a0;
 
 		constexpr ::std::ptrdiff_t m_iItemDefinitionIndex = 0x2FBA;
 		constexpr ::std::ptrdiff_t m_iItemIDHigh = 0x2FD0;
 		constexpr ::std::ptrdiff_t m_iMostRecentModelBoneCounter = 0x2690;
 		constexpr ::std::ptrdiff_t m_iObserverMode = 0x3388;
-		constexpr ::std::ptrdiff_t m_iRoundKillNum = 0x99a0;
 		constexpr ::std::ptrdiff_t m_iShotsFired = 0x103E0;
 		constexpr ::std::ptrdiff_t m_iState = 0x3268;
 		constexpr ::std::ptrdiff_t m_iTeamNum = 0xF4;
@@ -136,7 +136,10 @@ namespace hazedumper {
 		constexpr ::std::ptrdiff_t dwForceLeft = 0x320BE70;
 		constexpr ::std::ptrdiff_t dwForceRight = 0x320BE7C;
 		constexpr ::std::ptrdiff_t dwGameDir = 0x62B900;
+
 		constexpr ::std::ptrdiff_t dwGameRulesProxy = 0x52F90CC;
+		constexpr ::std::ptrdiff_t m_totalRoundsPlayed = 0x64;
+
 		constexpr ::std::ptrdiff_t dwGetAllClasses = 0xDE9CAC;
 		constexpr ::std::ptrdiff_t dwGlobalVars = 0x58CCE0;
 		constexpr ::std::ptrdiff_t dwGlowObjectManager = 0x5324588;

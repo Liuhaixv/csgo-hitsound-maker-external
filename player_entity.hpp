@@ -10,7 +10,6 @@
 #include "client.hpp"
 #include "signatures.hpp"
 #include "misc/config.hpp"
-#include "client.hpp"
 
 using namespace hazedumper;
 
@@ -36,6 +35,7 @@ private:
 public:
 	PlayerEntity() {
 		memory = nullptr;
+		//client = nullptr;
 		playerBaseAddr = NULL;
 	}
 
@@ -94,7 +94,8 @@ public:
 	}
 
 	inline int get_flashed_enemies_num() {
-		return memory->read_mem<int>(playerBaseAddr + netvars::m_iRoundFlashedEnemiesNum);
+		int current_round_index = get_round_index();
+		return memory->read_mem<int>(playerBaseAddr + netvars::m_iFlashedEnemiesNumAtFirstRound + current_round_index * 0x4);
 	}
 
 	inline bool get_dormant() {
@@ -109,6 +110,11 @@ public:
 	// 3 - counter terrorist
 	inline int get_team() {
 		return memory->read_mem<int>(playerBaseAddr + netvars::m_iTeamNum);
+	}
+
+	//index from 0, the first round 's index is 0
+	inline int get_round_index() {
+		return memory->read_mem<int>(memory->read_mem<int>(memory->clientBaseAddr + signatures::dwGameRulesProxy) + signatures::m_totalRoundsPlayed);
 	}
 
 	// FL_ONGROUND   (1 << 0) on the ground

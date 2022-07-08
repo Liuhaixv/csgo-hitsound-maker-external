@@ -113,8 +113,8 @@ public:
 				int spect_id = local_player.get_observer_target();
 
 				//刚死亡还没旁观
-				if (spect_id > 64) {
-					spect_id = last_spect_id;
+				if (spect_id < 64) {
+					last_spect_id = spect_id;
 				}
 
 				//获取被旁观的玩家
@@ -230,8 +230,7 @@ public:
 	}
 	
 	//enable_when_spectate 旁观时是否启用
-	void thread_hitmaker(hacks_state* state, bool enable_when_spectate) { // Bunny hop - F2
-		bool f2_released = true;
+	void thread_hitmaker(hacks_state* state, bool enable_when_spectate) {
 		while (true) {
 			if (state->game) {
 				bool hitted = false;
