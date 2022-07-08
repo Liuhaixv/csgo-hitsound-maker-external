@@ -32,7 +32,7 @@ class PlayerEntity {
 private:
 	Memory* memory;
 	DWORD playerBaseAddr;
-	time_t last_time_hit_enemy;
+	time_t last_time_fire;
 	
 
 public:
@@ -154,8 +154,8 @@ public:
 		return lpobstarget;
 	}
 
-	void update_last_hit_time() {
-		this->last_time_hit_enemy = time(0);
+	void update_last_time_fire() {
+		this->last_time_fire = time(0);
 	}
 };
 #endif
