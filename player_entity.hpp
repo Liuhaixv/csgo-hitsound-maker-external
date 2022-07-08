@@ -6,6 +6,7 @@
 
 #define _USE_MATH_DEFINES // to access math consts like PI number
 #include <math.h>
+#include <time.h>
 #include "memory.hpp"
 #include "client.hpp"
 #include "signatures.hpp"
@@ -31,6 +32,8 @@ class PlayerEntity {
 private:
 	Memory* memory;
 	DWORD playerBaseAddr;
+	time_t last_time_hit_enemy;
+	
 
 public:
 	PlayerEntity() {
@@ -149,6 +152,10 @@ public:
 	inline int get_observer_target() {
 		int lpobstarget = memory->read_mem<int>(playerBaseAddr + netvars::m_hObserverTarget)& ENT_ENTRY_MASK;
 		return lpobstarget;
+	}
+
+	void update_last_hit_time() {
+		this->last_time_hit_enemy = time(0);
 	}
 };
 #endif

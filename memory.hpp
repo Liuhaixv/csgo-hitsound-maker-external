@@ -41,6 +41,8 @@ public:
 
 	~Memory() {
 		CloseHandle(tProcess);
+		this->tPID = NULL;
+		this->tProcess = NULL;
 	}
 
 	/*
@@ -64,6 +66,14 @@ public:
 	*/
 	HANDLE handle_process(const std::string_view targetProcess)
 	{
+		tPID =get_porcId_by_name(targetProcess);
+
+		std::cout << "pID:" << tPID << std::endl;
+		tProcess = OpenProcess(PROCESS_ALL_ACCESS, false, tPID);
+		return tProcess;
+	}
+	
+	static DWORD get_porcId_by_name(const std::string_view targetProcess) {
 		DWORD procId = 0;
 		HANDLE hSnap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
 		if (hSnap != INVALID_HANDLE_VALUE)
@@ -77,7 +87,7 @@ public:
 					if (!targetProcess.compare(procEntry.szExeFile))
 					{
 						procId = procEntry.th32ProcessID;
-						std::cout << "current pID:" << procId << std::endl;
+						//std::cout << "found pID:" << procId << std::endl;
 						//break;
 					}
 				} while (Process32Next(hSnap, &procEntry));
@@ -85,10 +95,7 @@ public:
 		}
 		CloseHandle(hSnap);
 
-		tPID = procId;
-		std::cout << "pID:" << tPID << std::endl;
-		tProcess = OpenProcess(PROCESS_ALL_ACCESS, false, tPID);
-		return tProcess;
+		return procId;
 	}
 
 

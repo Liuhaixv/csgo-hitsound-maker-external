@@ -26,10 +26,13 @@ public:
 
 	// Client states: LOBBY = 1, LOADING = 2, CONNECTING = 3, CONNECTED = 5, INGAME = 6
 	bool in_game() {
-		if (memory->tProcess != NULL && memory->clientBaseAddr != NULL && memory->engineBaseAddr != NULL) {
+		if (memory->tProcess != NULL) {
+			if (memory->tPID != Memory::get_porcId_by_name(TARGET)) {
+				memory->~Memory();
+				return false;
+			}
 			return memory->read_mem<DWORD>(_getClientState() + signatures::dwClientState_State) == 6;
 		}
-
 		return false;
 	}
 

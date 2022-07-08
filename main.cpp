@@ -51,6 +51,8 @@ int main()
     while (true) {
         while (mem.tProcess != NULL && mem.clientBaseAddr != NULL && mem.engineBaseAddr != NULL) {
             if (!state.process) {
+
+                std::cout << "Game found" << std::endl;
                 state.process = true;
             }
 
@@ -61,14 +63,18 @@ int main()
                     hacks.init();
                 }
 
+                
+
                 // SendMessage(ol.hwnd, WM_PAINT, NULL, NULL);
-                Sleep(500);
+                Sleep(1000);
             }
 
             state.game = false;
             hacks.bsp_setted = false;
             Sleep(5000);
         }
+
+        std::cout << "Game not found, sleeping for 5 secs" << std::endl;
 
         state.process = false;
         ++connect_count;
