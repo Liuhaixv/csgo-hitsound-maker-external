@@ -16,3 +16,7 @@ Method which detects whether enemies are flashed may not work
 
 ## Credits
 [@Blaumaus](https://github.com/Blaumaus) for his [le_chiffre](https://github.com/Blaumaus/le_chiffre/tree/main/Le_Chiffre)
+
+### Downloads
+
+![](https://img.shields.io/github/downloads/Liuhaixv/csgo-hitsound-maker-external/total)
