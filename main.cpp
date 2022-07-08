@@ -9,28 +9,6 @@
 #include "hacks.hpp"
 #include "antiAC.hpp"
 
-DWORD pid;
-
-struct Offset {
-	DWORD dwLocalPlayer = 0xDBF4CC;//ok
-	DWORD m_fFlags = 0x104;//ok
-	//int m_iCrosshairId = 0x11838;//ok
-	DWORD dwEntityList = 0x4DDB92C;//ok
-	int TotalHitCount = 0x103f8;//ok
-	DWORD m_iHealth = 0x100;//ok
-	int RoundKillNum = 0x99a0;//ok
-}O;
-struct Values {
-	DWORD localPlayer;
-	DWORD gameModule;
-	BYTE flag;
-	int LocalTeam;
-	int CrossHairID;
-	int EnemyTeam;
-	DWORD EnemyInCH;
-}V;
-
-
 void hacks_state_monitor(hacks_state* state, Client* client) { // Bunny hop - F2
 	while (true) {
 		while (client->in_game()) {
@@ -45,9 +23,11 @@ void hacks_state_monitor(hacks_state* state, Client* client) { // Bunny hop - F2
 	}
 }
 
+
+//关闭快速编辑
+//disable quick edit
 //to avoid console pause
 void disable_quick_edit() {
-    //关闭快速编辑
     HANDLE hInput;
     DWORD prev_mode;
     hInput = GetStdHandle(STD_INPUT_HANDLE);

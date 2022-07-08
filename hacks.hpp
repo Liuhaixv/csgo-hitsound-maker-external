@@ -157,6 +157,7 @@ public:
 		return false;
 	}
 
+	//this may not be functioning 
 	bool flash(bool enable_when_spectate = false) {
 		static int oldFlashNum = 0;
 		static int last_spect_id = local_player.get_observer_target();
