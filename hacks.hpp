@@ -113,7 +113,7 @@ public:
 				int spect_id = local_player.get_observer_target();
 
 				//¸ÕËÀÍö»¹Ã»ÅÔ¹Û
-				if (spect_id < 64) {
+				if (spect_id > 64) {
 					last_spect_id = spect_id;
 				}
 
