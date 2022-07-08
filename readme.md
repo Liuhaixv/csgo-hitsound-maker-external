@@ -1,4 +1,4 @@
-# csgo-hitmaker-external
+# csgo-hitsound-maker-external
 CSGO sound based external cheat
 
 ## Features
