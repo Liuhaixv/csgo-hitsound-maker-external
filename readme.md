@@ -14,9 +14,7 @@ CSGO sound based external cheat
 [![IMAGE ALT TEXT](https://github.com/Liuhaixv/csgo-hitsound-maker-external/blob/master/img/0.jpg)](https://www.youtube.com/watch?v=Q_okx0boOVw&t=42s)
 
 ## Known Issues
-~~kill sound or hit sound played when changing spectated player~~
-
-~~Method which detects whether enemies are flashed may not work~~
+empty
 
 ## Credits
 [@Blaumaus](https://github.com/Blaumaus) for his [le_chiffre](https://github.com/Blaumaus/le_chiffre/tree/main/Le_Chiffre)
