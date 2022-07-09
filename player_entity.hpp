@@ -86,11 +86,11 @@ public:
 	}
 
 	inline int get_round_hit_times() {
-		return memory->read_mem<int>(playerBaseAddr + netvars::m_iRoundHitTimes);
+		return memory->read_mem<int>(playerBaseAddr + netvars::currentRoundHitTimes);
 	}
 
 	inline int get_round_kill_num() {
-		return memory->read_mem<int>(playerBaseAddr + netvars::m_iRoundKillNum);
+		return memory->read_mem<int>(playerBaseAddr + netvars::currentRoundKillsNum);
 	}
 
 	inline int get_round_headshot_kill_num() {
@@ -99,12 +99,12 @@ public:
 	}
 
 	inline int get_round_deald_damage() {
-		return memory->read_mem<int>(playerBaseAddr + netvars::m_iRoundDealdDamageTotal);
+		return memory->read_mem<int>(playerBaseAddr + netvars::currentRoundDealdDamageTotal);
 	}
 
 	inline int get_flashed_enemies_num() {
 		int current_round_index = get_round_index();
-		return memory->read_mem<int>(playerBaseAddr + netvars::m_iFlashedEnemiesNumAtFirstRound + current_round_index * 0x4);
+		return memory->read_mem<int>(playerBaseAddr + netvars::flashedEnemiesNumAtFirstRound + current_round_index * 0x4);
 	}
 
 	inline bool get_dormant() {
