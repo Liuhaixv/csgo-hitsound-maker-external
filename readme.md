@@ -8,7 +8,9 @@ CSGO sound based external cheat
 
 2.Play sound when you killed enemy.
 
-3.Play sound when falshed enemy.
+3.Play sound when you headshot killed enemy.
+
+4.Play sound when falshed enemy.
 
 ## Usage
 Copy the folder "sounds" from source to folder where .exe is, you can replace the .wav files with whatever .wav you like
