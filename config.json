@@ -1,4 +1,3 @@
-//Use hazedumper or GH_dumper to dump signatures from this config
 {
   "executable": "csgo.exe",
   "filename": "csgo",
@@ -94,34 +93,34 @@
       "pattern": "F3 0F 11 86 ? ? ? ? F3 0F 10 44 24 ? F3 0F 11 86"
     },
     {
-        "name": "clientstate_delta_ticks",
-        "extra": 0,
-        "relative": false,
-        "module": "engine.dll",
-        "offsets": [
-            2
-        ],
-        "pattern": "C7 87 ? ? ? ? ? ? ? ? FF 15 ? ? ? ? 83 C4 08"
+      "name": "clientstate_delta_ticks",
+      "extra": 0,
+      "relative": false,
+      "module": "engine.dll",
+      "offsets": [
+        2
+      ],
+      "pattern": "C7 87 ? ? ? ? ? ? ? ? FF 15 ? ? ? ? 83 C4 08"
     },
     {
-        "name": "clientstate_last_outgoing_command",
-        "extra": 0,
-        "relative": false,
-        "module": "engine.dll",
-        "offsets": [
-            2
-        ],
-        "pattern": "8B 8F ? ? ? ? 8B 87 ? ? ? ? 41"
+      "name": "clientstate_last_outgoing_command",
+      "extra": 0,
+      "relative": false,
+      "module": "engine.dll",
+      "offsets": [
+        2
+      ],
+      "pattern": "8B 8F ? ? ? ? 8B 87 ? ? ? ? 41"
     },
     {
-        "name": "clientstate_choked_commands",
-        "extra": 0,
-        "relative": false,
-        "module": "engine.dll",
-        "offsets": [
-            2
-        ],
-        "pattern": "8B 87 ? ? ? ? 41"
+      "name": "clientstate_choked_commands",
+      "extra": 0,
+      "relative": false,
+      "module": "engine.dll",
+      "offsets": [
+        2
+      ],
+      "pattern": "8B 87 ? ? ? ? 41"
     },
     {
       "name": "clientstate_net_channel",
@@ -459,44 +458,44 @@
       "pattern": "A1 ? ? ? ? 89 74 24 28"
     },
     {
-        "name": "interface_engine_cvar",
-        "extra": 0,
-        "relative": true,
-        "module": "vstdlib.dll",
-        "offsets": [
-            2
-        ],
-        "pattern": "8B 0D ? ? ? ? C7 05"
+      "name": "interface_engine_cvar",
+      "extra": 0,
+      "relative": true,
+      "module": "vstdlib.dll",
+      "offsets": [
+        2
+      ],
+      "pattern": "8B 0D ? ? ? ? C7 05"
     },
     {
-        "name": "convar_name_hash_table",
-        "extra": 0,
-        "relative": true,
-        "module": "vstdlib.dll",
-        "offsets": [
-            3
-        ],
-        "pattern": "8B 3C 85"
+      "name": "convar_name_hash_table",
+      "extra": 0,
+      "relative": true,
+      "module": "vstdlib.dll",
+      "offsets": [
+        3
+      ],
+      "pattern": "8B 3C 85"
     },
     {
-        "name": "m_bDormant",
-        "extra": 8,
-        "relative": false,
-        "module": "client.dll",
-        "offsets": [
-            2
-        ],
-        "pattern": "8A 81 ? ? ? ? C3 32 C0"
+      "name": "m_bDormant",
+      "extra": 8,
+      "relative": false,
+      "module": "client.dll",
+      "offsets": [
+        2
+      ],
+      "pattern": "8A 81 ? ? ? ? C3 32 C0"
     },
     {
-       "name": "model_ambient_min",
-       "extra": 0,
-       "relative": true,
-       "module": "engine.dll",
-       "offsets": [
-         4
-       ],
-       "pattern": "F3 0F 10 0D ? ? ? ? F3 0F 11 4C 24 ? 8B 44 24 20 35 ? ? ? ? 89 44 24 0C"
+      "name": "model_ambient_min",
+      "extra": 0,
+      "relative": true,
+      "module": "engine.dll",
+      "offsets": [
+        4
+      ],
+      "pattern": "F3 0F 10 0D ? ? ? ? F3 0F 11 4C 24 ? 8B 44 24 20 35 ? ? ? ? 89 44 24 0C"
     },
     {
       "name": "set_abs_angles",
@@ -552,6 +551,16 @@
       "relative": false,
       "module": "client.dll",
       "pattern": "55 8B EC 53 8B 5D 08 56 57 8B F9 33 F6 39 77 28"
+    },
+    {
+      "name": "m_bIsLocalPlayer",
+      "extra": 0,
+      "relative": false,
+      "module": "client.dll",
+      "offsets": [
+        2
+      ],
+      "pattern": "80 BF ? ? ? ? ? F2 0F 10 1D"
     }
   ],
   "netvars": [
@@ -658,7 +667,7 @@
       "prop": "m_fFlags",
       "table": "DT_CSPlayer"
     },
-	{
+    {
       "name": "m_hViewModel",
       "prop": "m_hViewModel[0]",
       "table": "DT_CSPlayer"
@@ -719,7 +728,7 @@
       "prop": "m_iClip1",
       "table": "DT_BaseCombatWeapon"
     },
-	{
+    {
       "name": "m_zoomLevel",
       "prop": "m_zoomLevel",
       "table": "DT_WeaponCSBaseGun"
@@ -878,12 +887,12 @@
       "prop": "m_clrRender",
       "table": "DT_BaseEntity"
     },
-	{
+    {
       "name": "m_bBombTicking",
       "prop": "m_bBombTicking",
       "table": "DT_PlantedC4"
     },
-	{
+    {
       "name": "m_bBombDefused",
       "prop": "m_bBombDefused",
       "table": "DT_PlantedC4"
@@ -893,7 +902,7 @@
       "prop": "m_flC4Blow",
       "table": "DT_PlantedC4"
     },
-	{
+    {
       "name": "m_hBombDefuser",
       "prop": "m_hBombDefuser",
       "table": "DT_PlantedC4"
@@ -913,7 +922,7 @@
       "prop": "m_flDefuseCountDown",
       "table": "DT_PlantedC4"
     },
-	{
+    {
       "name": "m_nBombSite",
       "prop": "m_nBombSite",
       "table": "DT_PlantedC4"
@@ -1025,23 +1034,27 @@
       "prop": "m_flCustomAutoExposureMax",
       "table": "DT_EnvTonemapController"
     },
-	{
+    {
       "name": "m_nViewModelIndex",
       "prop": "m_nViewModelIndex",
       "table": "DT_BaseViewModel"
     },
-	{
-		//round_index_of_first_round = 0;
-		//player's flashed enemies num at first round, flashed_nums = read(playerentity + m_iMatchStats_EnemiesFlashed + round_index * 0x4)
+    {
+      "name": "m_nModelIndex",
+      "prop": "m_nModelIndex",
+      "table": "DT_BaseViewModel"
+    },
+    {
+      //round_index_of_first_round = 0;
+      //player's flashed enemies num at first round, flashed_nums = read(playerentity + m_iMatchStats_EnemiesFlashed + round_index * 0x4)
       "name": "flashedEnemiesNumAtFirstRound",
       "prop": "m_iMatchStats_EnemiesFlashed",
       "table": "DT_CSPlayer"
-	},
-	{
+    },
+    {
       "name": "headshotKilledEnemiesAtFirstRound",
       "prop": "m_iMatchStats_HeadShotKills",
       "table": "DT_CSPlayer"
-	}
-	
+    }
   ]
 }
