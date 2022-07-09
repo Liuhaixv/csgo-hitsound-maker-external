@@ -90,7 +90,7 @@ public:
 	}
 
 	inline int get_round_kill_num() {
-		return memory->read_mem<int>(playerBaseAddr + netvars::currentRoundKillsNum);
+		return memory->read_mem<int>(playerBaseAddr + netvars::m_iNumRoundKills);
 	}
 
 	inline int get_round_headshot_kill_num() {
