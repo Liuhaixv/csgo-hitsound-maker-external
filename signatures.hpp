@@ -79,9 +79,10 @@ namespace hazedumper {
 		constexpr ::std::ptrdiff_t m_iHealth = 0x100;
 
 		/*PlayerEntity*/
+		constexpr ::std::ptrdiff_t currentRoundKillsNum = 0x99a0;
 		constexpr ::std::ptrdiff_t roundHitTimes = 0x11c70;
-		constexpr ::std::ptrdiff_t m_iRoundDealdDamageTotal = 0x99a8;
-		constexpr ::std::ptrdiff_t m_iNumRoundKills = 0x99a0;
+		constexpr ::std::ptrdiff_t currentRoundDealdDamageTotal = 0x99a8;
+		constexpr ::std::ptrdiff_t currentRoundHitTimes = 0x99a0;
 
 		//read below value with (address + 0x4 * round_index)
 		constexpr ::std::ptrdiff_t flashedEnemiesNumAtFirstRound = 0x10a54;//m_iMatchStats_EnemiesFlashed		
