@@ -1055,6 +1055,11 @@
       "name": "headshotKilledEnemiesAtFirstRound",
       "prop": "m_iMatchStats_HeadShotKills",
       "table": "DT_CSPlayer"
+    },
+    {
+      "name": "m_iNumRoundKills",
+      "prop": "m_iNumRoundKills",
+      "table": "DT_CSPlayer"
     }
   ]
 }
