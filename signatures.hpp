@@ -78,15 +78,16 @@ namespace hazedumper {
 		constexpr ::std::ptrdiff_t m_iGlowIndex = 0x10488;
 		constexpr ::std::ptrdiff_t m_iHealth = 0x100;
 
-		//get_flashed_enemies(roundindex i) => read(player + m_iFlashedEnemiesNumAtFirstRound + i * 0x4)
-		constexpr ::std::ptrdiff_t m_iFlashedEnemiesNumAtFirstRound = 0x10a54;
-		constexpr ::std::ptrdiff_t headshotKilledEnemiesAtFirstRound = 0x10874;
-
-		constexpr ::std::ptrdiff_t m_iRoundHitTimes = 0x11c70;
-		constexpr ::std::ptrdiff_t m_iRoundHitDamagedTimes = 0x0;
+		/*PlayerEntity*/
+		constexpr ::std::ptrdiff_t roundHitTimes = 0x11c70;
 		constexpr ::std::ptrdiff_t m_iRoundDealdDamageTotal = 0x99a8;
-		//constexpr ::std::ptrdiff_t  m_iGrenadeAndMolotovDealdDamageTotalAtFirstRound = 0x10a14;
-		constexpr ::std::ptrdiff_t m_iRoundKillNum = 0x99a0;
+		constexpr ::std::ptrdiff_t m_iNumRoundKills = 0x99a0;
+
+		//read below value with (address + 0x4 * round_index)
+		constexpr ::std::ptrdiff_t flashedEnemiesNumAtFirstRound = 0x10a54;//m_iMatchStats_EnemiesFlashed		
+		constexpr ::std::ptrdiff_t headshotKilledEnemiesAtFirstRound = 0x10874;//m_iMatchStats_HeadShotKills
+
+		/*PlayerEntity*/
 
 		constexpr ::std::ptrdiff_t m_iItemDefinitionIndex = 0x2FBA;
 		constexpr ::std::ptrdiff_t m_iItemIDHigh = 0x2FD0;
