@@ -41,7 +41,7 @@ int main()
 	Memory mem;
 	hacks_state state;
 	Client client(&mem);
-	Hacks hacks(&mem, &client);
+	Hacks hacks(&mem, &client, &state);
     int connect_count = 0;
 
     std::thread hitmaker_thread(&Hacks::thread_hitmaker, &hacks, &state, true);
@@ -63,6 +63,8 @@ int main()
                     hacks.init();
                 }
 
+                //update round_index
+                state.round_index = client.get_round_index();
                 
 
                 // SendMessage(ol.hwnd, WM_PAINT, NULL, NULL);
@@ -87,7 +89,7 @@ int main()
 
             new(&mem) Memory();
             new(&client) Client(&mem);
-            new(&hacks) Hacks(&mem, &client);
+            new(&hacks) Hacks(&mem, &client, &state);
         }
     }
 

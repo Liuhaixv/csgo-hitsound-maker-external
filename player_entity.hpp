@@ -102,9 +102,8 @@ public:
 		return memory->read_mem<int>(playerBaseAddr + netvars::currentRoundDealdDamageTotal);
 	}
 
-	inline int get_flashed_enemies_num() {
-		int current_round_index = get_round_index();
-		return memory->read_mem<int>(playerBaseAddr + netvars::flashedEnemiesNumAtFirstRound + current_round_index * 0x4);
+	inline int get_flashed_enemies_num(int round_index) {
+		return memory->read_mem<int>(playerBaseAddr + netvars::flashedEnemiesNumAtFirstRound + round_index * 0x4);
 	}
 
 	inline bool get_dormant() {

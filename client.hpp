@@ -67,6 +67,11 @@ public:
 
 		return *reinterpret_cast<float*>(&sens_fn);
 	}
+
+	//index from 0, the first round 's index is 0
+	int get_round_index() {
+		return memory->read_mem<int>(memory->read_mem<int>(memory->clientBaseAddr + signatures::dwGameRulesProxy) + signatures::m_totalRoundsPlayed);
+	}
 };
 
 #endif

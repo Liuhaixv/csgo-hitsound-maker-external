@@ -32,8 +32,10 @@ namespace {
 		bool radar_hack = false;
 		bool bunny_hop = false;
 		bool aimbot = false;
-		bool process = false; 
+		bool process = false;
 		bool game = false;
+
+		int round_index = -1;
 	};
 }
 #endif

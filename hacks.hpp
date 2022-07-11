@@ -31,6 +31,7 @@ class Hacks {
 private:
 	Memory* memory;
 	Client* client;
+	hacks_state* state;
 	PlayerEntity local_player;
 
 public:
@@ -207,7 +208,7 @@ public:
 				if (spect_id != last_spect_id) {
 					last_spect_id = spect_id;
 					//初始化数据
-					oldFlashNum = player->get_flashed_enemies_num();
+					oldFlashNum = player->get_flashed_enemies_num(state->round_index);
 					return false;
 				}
 			}
@@ -221,7 +222,7 @@ public:
 			return false;
 		}
 
-		int flashedNums = player->get_flashed_enemies_num();
+		int flashedNums = player->get_flashed_enemies_num(state->round_index);
 
 		//round start or restart reset the killnum
 		if (oldFlashNum > flashedNums || flashedNums == 0) {
@@ -376,9 +377,10 @@ public:
 		}
 	}
 
-	Hacks(Memory* memory, Client* client) {
+	Hacks(Memory* memory, Client* client,hacks_state* state) {
 		this->memory = memory;
 		this->client = client;
+		this->state = state;
 		bsp_setted = false;
 		init();
 	}
