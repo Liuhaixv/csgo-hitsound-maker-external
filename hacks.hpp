@@ -37,6 +37,14 @@ private:
 public:
 	bool bsp_setted;
 
+	Hacks(Memory* memory, Client* client, hacks_state* state) {
+		this->memory = memory;
+		this->client = client;
+		this->state = state;
+		bsp_setted = false;
+		init();
+	}
+
 	void init() {
 		local_player = client->get_local_player();
 	}
@@ -57,7 +65,7 @@ public:
 
 				//刚死亡还没旁观
 				if (spect_id > 64) {
-					spect_id = last_spect_id;
+					return false;
 				}
 
 				//获取被旁观的玩家
@@ -126,7 +134,7 @@ public:
 
 				//刚死亡还没旁观
 				if (spect_id > 64) {
-					last_spect_id = spect_id;
+					return false;
 				}
 
 				//获取被旁观的玩家
@@ -198,7 +206,7 @@ public:
 
 				//刚死亡还没旁观
 				if (spect_id > 64) {
-					spect_id = last_spect_id;
+					return false;
 				}
 
 				//获取被旁观的玩家
@@ -376,16 +384,5 @@ public:
 			Sleep(2);
 		}
 	}
-
-	Hacks(Memory* memory, Client* client,hacks_state* state) {
-		this->memory = memory;
-		this->client = client;
-		this->state = state;
-		bsp_setted = false;
-		init();
-	}
-
-	
-
 };
 #endif
