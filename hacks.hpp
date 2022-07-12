@@ -145,7 +145,7 @@ public:
 					last_spect_id = spect_id;
 					//初始化数据
 					oldKillNum = player->get_round_kill_num();
-					oldHeadShotKillNum = player->get_round_headshot_kill_num();
+					oldHeadShotKillNum = player->get_round_headshot_kill_num(state->round_index);
 					return 0;
 				}
 			}
@@ -170,18 +170,27 @@ public:
 		else {
 			if (killNum > oldKillNum && ((killNum - oldKillNum < 500)))
 			{
-				oldKillNum = killNum;		
+				oldKillNum = killNum;
+
+				int round_index = state->round_index;
+
+				//回合刚结束
+				if (time(NULL) - state->last_time_round_index_changed < 1) {
+					round_index--;
+				}
 
 				//wait for headshot kill data been updated
 				Sleep(20);
-				int headshot_killNum = player->get_round_headshot_kill_num();
+				int headshot_killNum = player->get_round_headshot_kill_num(round_index);
 				if (headshot_killNum > oldHeadShotKillNum) {
 					oldHeadShotKillNum = headshot_killNum;
-					std::cout << "kills:" << killNum <<" (that was a headshot kill)" << std::endl;
+					std::cout << "kills:" << killNum << " (that was a headshot kill)" << std::endl;
+					std::cout << "oldHeadShotKillNum:" << oldHeadShotKillNum << " " << std::endl;
 					return 2;
 				}
 				std::cout << "headshot_kill" << headshot_killNum << std::endl;
-				std::cout << "kills:" << killNum << std::endl;
+				std::cout << "kills:" << killNum << "oldHeadShotKillNum:" << oldHeadShotKillNum << " " << std::endl;
+
 				return 1;
 			}
 		}

@@ -8,6 +8,7 @@
 #include "client.hpp"
 #include "hacks.hpp"
 #include "antiAC.hpp"
+#include<time.h>
 
 void hacks_state_monitor(hacks_state* state, Client* client) { // Bunny hop - F2
 	while (true) {
@@ -63,9 +64,16 @@ int main()
                     hacks.init();
                 }
 
+
+                int round_index = client.get_round_index();
+
+                //update last_time_round_index_changed
+                if (round_index != state.round_index) {
+                    time_t current_time =time(NULL);                                 
+                    state.last_time_round_index_changed = current_time;
+                }
                 //update round_index
-                state.round_index = client.get_round_index();
-                
+                state.round_index = round_index;
 
                 // SendMessage(ol.hwnd, WM_PAINT, NULL, NULL);
                 Sleep(1000);

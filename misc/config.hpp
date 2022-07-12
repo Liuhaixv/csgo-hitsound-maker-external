@@ -36,6 +36,7 @@ namespace {
 		bool game = false;
 
 		int round_index = -1;
+		time_t last_time_round_index_changed = time(NULL);
 	};
 }
 #endif
