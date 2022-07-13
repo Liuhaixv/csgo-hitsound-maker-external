@@ -10,7 +10,7 @@
 #include <iostream>
 #include<filesystem>
 
-using namespace hazedumper;
+using namespace offsets;
 namespace fs = std::filesystem;
 
 struct GlowStruct {
@@ -69,7 +69,7 @@ public:
 				}
 
 				//获取被旁观的玩家
-				player = &PlayerEntity(memory, memory->read_mem<DWORD>(memory->clientBaseAddr + signatures::dwEntityList + (short)0x10 * (spect_id - 1)));
+				player = &PlayerEntity(memory, memory->read_mem<DWORD>(memory->clientBaseAddr + dwEntityList + (short)0x10 * (spect_id - 1)));
 
 				//切换旁观人物
 				if (spect_id != last_spect_id) {
@@ -138,7 +138,8 @@ public:
 				}
 
 				//获取被旁观的玩家
-				player = &PlayerEntity(memory, memory->read_mem<DWORD>(memory->clientBaseAddr + signatures::dwEntityList + (short)0x10 * (spect_id - 1)));
+				player = &PlayerEntity(memory, memory->read_mem<DWORD>(memory->clientBaseAddr + 
+					dwEntityList + (short)0x10 * (spect_id - 1)));
 				
 				//切换旁观人物
 				if (spect_id != last_spect_id) {
@@ -219,7 +220,7 @@ public:
 				}
 
 				//获取被旁观的玩家
-				player = &PlayerEntity(memory, memory->read_mem<DWORD>(memory->clientBaseAddr + signatures::dwEntityList + (short)0x10 * (spect_id - 1)));
+				player = &PlayerEntity(memory, memory->read_mem<DWORD>(memory->clientBaseAddr + dwEntityList + (short)0x10 * (spect_id - 1)));
 
 				//切换旁观人物
 				if (spect_id != last_spect_id) {

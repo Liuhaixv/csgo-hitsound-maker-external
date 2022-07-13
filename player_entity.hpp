@@ -9,10 +9,10 @@
 #include <time.h>
 #include "memory.hpp"
 #include "client.hpp"
-#include "signatures.hpp"
+#include "./signature/csgo.h"
 #include "misc/config.hpp"
 
-using namespace hazedumper;
+using namespace offsets;
 
 struct BoneMatrix {
 	BYTE _junk1[0xC];
@@ -58,70 +58,72 @@ public:
 	// 5 - attack
 	// 6 - attack once, next reset to 4
 	inline void set_attack_state(DWORD val) {
-		memory->write_mem<DWORD>(memory->clientBaseAddr + signatures::dwForceAttack, val);
+		memory->write_mem<DWORD>(memory->clientBaseAddr + dwForceAttack, val);
 	}
 
 	// 4 - don't jump
 	// 5 - jump
 	// 6 - jump once, next reset to 4
 	inline void set_jump_state(DWORD val) {
-		memory->write_mem<DWORD>(memory->clientBaseAddr + signatures::dwForceJump, val);
+		memory->write_mem<DWORD>(memory->clientBaseAddr + dwForceJump, val);
 	}
 
 	inline void set_flash_duration(float val) {
-		memory->write_mem<float>(playerBaseAddr + netvars::m_flFlashDuration, val);
+		memory->write_mem<float>(playerBaseAddr + m_flFlashDuration, val);
 	}
 
 	inline void set_spotted(bool val) {
-		memory->write_mem<bool>(playerBaseAddr + netvars::m_bSpotted, val);
+		memory->write_mem<bool>(playerBaseAddr + m_bSpotted, val);
 	}
 
 	inline bool is_spotted() {
-		return memory->read_mem<bool>(playerBaseAddr + netvars::m_bSpotted);
+		return memory->read_mem<bool>(playerBaseAddr + m_bSpotted);
 	}
 
 	// [0, 100]
 	inline DWORD get_health() {
-		return memory->read_mem<DWORD>(playerBaseAddr + netvars::m_iHealth);
+		return memory->read_mem<DWORD>(playerBaseAddr + m_iHealth);
 	}
 
 	inline int get_round_hit_times() {
-		return memory->read_mem<int>(playerBaseAddr + netvars::currentRoundHitTimes);
+		return memory->read_mem<int>(playerBaseAddr + currentRoundHitTimes);
 	}
 
 	inline int get_round_kill_num() {
-		return memory->read_mem<int>(playerBaseAddr + netvars::m_iNumRoundKills);
+		return memory->read_mem<int>(playerBaseAddr + m_iNumRoundKills);
 	}
 
 	inline int get_round_headshot_kill_num(int round_index) {
-		return memory->read_mem<int>(playerBaseAddr + netvars::headshotKilledEnemiesAtFirstRound + round_index * 0x4);
+		return memory->read_mem<int>(playerBaseAddr + headshotKilledEnemiesAtFirstRound + round_index * 0x4);
 	}
 
 	inline int get_round_deald_damage() {
-		return memory->read_mem<int>(playerBaseAddr + netvars::currentRoundDealdDamageTotal);
+		return memory->read_mem<int>(playerBaseAddr + currentRoundDealdDamageTotal);
 	}
 
 	inline int get_flashed_enemies_num(int round_index) {
-		return memory->read_mem<int>(playerBaseAddr + netvars::flashedEnemiesNumAtFirstRound + round_index * 0x4);
+		return memory->read_mem<int>(playerBaseAddr + flashedEnemiesNumAtFirstRound + round_index * 0x4);
 	}
 
 	inline bool get_dormant() {
-		return memory->read_mem<bool>(playerBaseAddr + signatures::m_bDormant);
+		return memory->read_mem<bool>(playerBaseAddr + 
+			
+			m_bDormant);
 	}
 
 	inline DWORD get_crosshair_id() {
-		return memory->read_mem<DWORD>(playerBaseAddr + netvars::m_iCrosshairId);
+		return memory->read_mem<DWORD>(playerBaseAddr + m_iCrosshairId);
 	}
 
 	// 2 - terrorist
 	// 3 - counter terrorist
 	inline int get_team() {
-		return memory->read_mem<int>(playerBaseAddr + netvars::m_iTeamNum);
+		return memory->read_mem<int>(playerBaseAddr + m_iTeamNum);
 	}
 
 	//index from 0, the first round 's index is 0
 	inline int get_round_index() {
-		return memory->read_mem<int>(memory->read_mem<int>(memory->clientBaseAddr + signatures::dwGameRulesProxy) + signatures::m_totalRoundsPlayed);
+		return memory->read_mem<int>(memory->read_mem<int>(memory->clientBaseAddr + dwGameRulesProxy) + m_totalRoundsPlayed);
 	}
 
 	// FL_ONGROUND   (1 << 0) on the ground
@@ -135,7 +137,7 @@ public:
 	// FL_FAKECLIENT (1 << 8) fake client
 	// FL_INWATER    (1 << 9) in water
 	inline BYTE get_flags() {
-		return memory->read_mem<BYTE>(playerBaseAddr + netvars::m_fFlags);
+		return memory->read_mem<BYTE>(playerBaseAddr + m_fFlags);
 	}
 
 	inline DWORD get_base_addr() {
@@ -143,7 +145,7 @@ public:
 	}
 
 	inline coords_vector get_velocity() {
-		return memory->read_mem<coords_vector>(playerBaseAddr + netvars::m_vecVelocity);
+		return memory->read_mem<coords_vector>(playerBaseAddr + m_vecVelocity);
 	}
 
 	inline bool is_moving() {
@@ -154,7 +156,7 @@ public:
 
 	//return player_id
 	inline int get_observer_target() {
-		int lpobstarget = memory->read_mem<int>(playerBaseAddr + netvars::m_hObserverTarget)& ENT_ENTRY_MASK;
+		int lpobstarget = memory->read_mem<int>(playerBaseAddr + m_hObserverTarget)& ENT_ENTRY_MASK;
 		return lpobstarget;
 	}
 

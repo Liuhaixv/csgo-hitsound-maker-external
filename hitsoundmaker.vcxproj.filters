@@ -32,9 +32,6 @@
     <ClInclude Include="client.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="signatures.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="player_entity.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -42,6 +39,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="antiAC.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="signature\csgo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

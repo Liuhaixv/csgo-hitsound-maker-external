@@ -120,8 +120,8 @@
     <ClInclude Include="misc\config.hpp" />
     <ClInclude Include="hacks.hpp" />
     <ClInclude Include="player_entity.hpp" />
-    <ClInclude Include="signatures.hpp" />
     <ClInclude Include="misc\xor.hpp" />
+    <ClInclude Include="signature\csgo.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Release\hitsoundmaker.exe" />
