@@ -46,6 +46,7 @@ int main()
     int connect_count = 0;
 
     std::thread hitmaker_thread(&Hacks::thread_hitmaker, &hacks, &state, true);
+    std::thread sonar_thread(&Hacks::thread_sonar, &hacks, &state);
 
     disable_quick_edit();
 

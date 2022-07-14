@@ -2,16 +2,12 @@
 #define HACKS_HPP
 #pragma once
 
-#include <algorithm>
-#include<random>
-#include<mmsystem.h>
+#include"sound.hpp"
 #include "client.hpp"
 #include "player_entity.hpp"
 #include <iostream>
-#include<filesystem>
 
 using namespace offsets;
-namespace fs = std::filesystem;
 
 struct GlowStruct {
 	BYTE base[8];
@@ -259,86 +255,46 @@ public:
 		return false;
 	}
 
-	void shuffle_vector(std::vector<std::string>& vector) {
-		std::random_device rd;
-		std::shuffle(vector.begin(), vector.end(), rd);
+	//get enemy position(vector3) and transform to screen pos(vector2) using world_to_screen function
+	void sonar_crosshair(std::vector<std::string>  sonar_crosshair_beep_files) {
+		//TODO
 	}
 
-	void hit_sound(std::string filename) {
-		PlaySound(((std::string(".\\sounds\\hit\\") + filename).c_str()), NULL, SND_ASYNC);
-	}
+	//get closest enemy
+	void sonar_range(std::vector<std::string> sonar_rangescan_beep_files) {
+		//TODO
+		//1 secs at least, between two played sounds
+		//最低1秒时间间隔
+		int min_interval = 1;
+		int max_interval = 2;
+		//enemies within distance of 300 will trigger sonar
+		//距离在300内才会有声呐
+		int max_threshold_distance = 300;
+		int min_threshold_distance = 10;
 
-	void hit_sound(std::vector<std::string>& filenames) {
-		shuffle_vector(filenames);
-		PlaySound(((std::string(".\\sounds\\hit\\") + filenames.front()).c_str()), NULL, SND_ASYNC);
-	}
+		static time_t last_played_sound_time = time(NULL);
+		PlayerEntity enemy;
+		float distance_to_closest_enemy = local_player.get_closest_enemy(enemy);
 
-	void kill_sound(std::string filename) {
-		PlaySound(((std::string(".\\sounds\\kill\\") + filename).c_str()), NULL, SND_ASYNC);
-	}	
-	
-	void kill_sound(std::vector<std::string>& filenames) {
-		shuffle_vector(filenames);
-		PlaySound(((std::string(".\\sounds\\kill\\") + filenames.front()).c_str()), NULL, SND_ASYNC);
-	}
-
-	void headshotkill_sound(std::string filename) {
-		PlaySound(((std::string(".\\sounds\\headhshot_kill\\") + filename).c_str()), NULL, SND_ASYNC);
-	}
-
-	void headshotkill_sound(std::vector<std::string>& filenames) {
-		shuffle_vector(filenames);
-		PlaySound(((std::string(".\\sounds\\headshot_kill\\") + filenames.front()).c_str()), NULL, SND_ASYNC);
-	}
-
-	void headshot_hit_sound(std::string filename) {
-		PlaySound(((std::string(".\\sounds\\headshot_hit\\") + filename).c_str()), NULL, SND_ASYNC);
-	}	
-	
-	void headshot_hit_sound(std::vector<std::string>& filenames) {
-		shuffle_vector(filenames);
-		PlaySound(((std::string(".\\sounds\\headshot_hit\\") + filenames.front()).c_str()), NULL, SND_ASYNC);
-	}
-
-	void flash_sound(std::string filename) {
-		PlaySound(((std::string(".\\sounds\\flash\\") + filename).c_str()), NULL, SND_ASYNC);
-	}
-	
-	void flash_sound(std::vector <std::string>& filenames) {
-		shuffle_vector(filenames);
-		PlaySound(((std::string(".\\sounds\\flash\\") + filenames.front()).c_str()), NULL, SND_ASYNC);
-	}
-
-	void get_all_wav_files(std::string path, std::vector<std::string>& sound_files_container) {
-		try{
-			for (const auto& entry : fs::directory_iterator(path)) {
-				static std::string suffix = std::string(".wav");
-
-				std::string filename = entry.path().filename().string();
-
-				bool has_suffix = filename.find(suffix, filename.size() - suffix.size()) != std::string::npos;
-				if (has_suffix) {
-					sound_files_container.push_back(filename);
-				}
-			}
+		if (distance_to_closest_enemy > max_threshold_distance) {
+			return;
 		}
-		catch (const std::exception& ex){
 
+		time_t current_time = time(NULL);
+		time_t time_delta = current_time - last_played_sound_time;
+
+		//interval too short
+		if (time_delta < min_interval) {
+			return;
 		}
-	}
 
-	void init_sounds_files(
-		std::vector<std::string>& hit_sound_files,
-		std::vector<std::string>& kill_sound_files,
-		std::vector<std::string>& headshotkill_sound_files,
-		//TODO headshot_hit_sound_files
-		std::vector<std::string>& headshot_hit_sound_files,
-		std::vector<std::string>& flash_sound_files) {
-		get_all_wav_files("./sounds/hit", hit_sound_files);
-		get_all_wav_files("./sounds/kill",kill_sound_files);
-		get_all_wav_files("./sounds/headshot_kill",headshotkill_sound_files);
-		get_all_wav_files("./sounds/headshot_hit",headshot_hit_sound_files);
-		get_all_wav_files("./sounds/flash",flash_sound_files);
+		sonar_range_scan_sound(sonar_rangescan_beep_files);
+		if (distance_to_closest_enemy - min_threshold_distance > 0) {
+			//delay the next sound play time
+			last_played_sound_time += (max_interval - min_interval)
+				* (distance_to_closest_enemy - min_threshold_distance)
+				/ (max_threshold_distance - min_threshold_distance);
+		}
 	}
 	
 	//enable_when_spectate 旁观时是否启用
@@ -349,12 +305,11 @@ public:
 		static std::vector<std::string> headshot_hit_sound_files;
 		static std::vector<std::string> flash_sound_files;
 
-		init_sounds_files(hit_sound_files,
+		init_sounds_files_of_hit_and_kill(hit_sound_files,
 							kill_sound_files,
 							headshotkill_sound_files,
 							headshot_hit_sound_files,
 							flash_sound_files);
-
 
 		while (true) {
 			if (state->game) {
@@ -394,5 +349,24 @@ public:
 			Sleep(2);
 		}
 	}
+
+	void thread_sonar(hacks_state* state) {
+		static std::vector<std::string> sonar_crosshair_beep_files;//beep when crosshair near enemy
+		static std::vector<std::string> sonar_rangescan_beep_files;//beep when enemy nearby
+
+		init_sounds_files_of_sonar(sonar_crosshair_beep_files,sonar_rangescan_beep_files);
+
+		while (true) {
+			if (state->game) {				
+				sonar_crosshair(sonar_crosshair_beep_files);
+				sonar_range(sonar_rangescan_beep_files);
+			}
+			else Sleep(1000);
+
+			Sleep(2);
+		}
+	}
+
+
 };
 #endif

@@ -11,8 +11,10 @@
 #include "client.hpp"
 #include "./signature/csgo.h"
 #include "misc/config.hpp"
+#include "bsp_parser/valve-bsp-parser/core/matrix.hpp"
 
 using namespace offsets;
+using namespace rn;
 
 struct BoneMatrix {
 	BYTE _junk1[0xC];
@@ -105,6 +107,21 @@ public:
 		return memory->read_mem<int>(playerBaseAddr + flashedEnemiesNumAtFirstRound + round_index * 0x4);
 	}
 
+	// player's x, y, z bone position
+// bone_id - an ID in bone's vector, the most important ones are: 8 - head, 7 - neck, 6, 5, 4, 3, 0 - chest (from top)
+	inline coords_vector get_bone_position(int bone_id) {
+		DWORD bone_matrix = memory->read_mem<DWORD>(playerBaseAddr + offsets::m_dwBoneMatrix);
+		BoneMatrix bone = memory->read_mem<BoneMatrix>(bone_matrix + bone_id * 0x30);
+		return coords_vector({ bone.x, bone.y, bone.z });
+	}
+
+	// returns rn::vector3 bone position. needed for bsp parser
+	inline vector3 get_bone_position_v3(int bone_id) {
+		coords_vector cv = get_bone_position(bone_id);
+		const std::array<float, 3U> vec = { cv.x, cv.y, cv.z };
+		return vector3(vec);
+	}
+
 	inline bool get_dormant() {
 		return memory->read_mem<bool>(playerBaseAddr + 
 			
@@ -160,8 +177,53 @@ public:
 		return lpobstarget;
 	}
 
+	//get closet_enemy and distance
+	float get_closest_enemy(PlayerEntity& enemy) {
+		float closest_distance = 10000000; // initial closest distance between local player and an enemy
+		int player_team = get_team();
+
+		for (short i = 0; i < 32; ++i) {
+			PlayerEntity target(memory, memory->read_mem<DWORD>(memory->clientBaseAddr + offsets::dwEntityList + (short)0x10 * i));
+
+			if (target.valid_player() && target.get_team() != player_team) {
+				float distance = get_distance(target);
+				if (distance < closest_distance) {
+					closest_distance = distance;
+					enemy = target;
+				}
+			}
+		}
+
+		return closest_distance;
+	}
+
+	// returns the distance between 2 player's entities (XYZ points)
+// https://www.math.usm.edu/lambers/mat169/fall09/lecture17.pdf
+	inline float get_distance(coords_vector target) {
+		coords_vector local_player_vector3 = get_origin();
+		return (float)sqrt(pow(target.x - local_player_vector3.x, 2)
+			+ pow(target.y - local_player_vector3.y, 2)
+			+ pow(target.z - local_player_vector3.z, 2));
+	}
+
+	inline float get_distance(PlayerEntity* target) {
+		return get_distance(target->get_origin());
+	}
+
+	inline float get_distance(PlayerEntity target) {
+		return get_distance(target.get_origin());
+	}
+
 	void update_last_time_fire() {
 		this->last_time_fire = time(0);
+	}
+
+	coords_vector get_origin() {
+		return get_origin(this);
+	}
+
+	inline coords_vector get_origin(PlayerEntity* player) {
+		return memory->read_mem<coords_vector>(player->playerBaseAddr + offsets::m_vecOrigin);
 	}
 };
 #endif

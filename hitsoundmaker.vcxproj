@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -111,10 +111,15 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="bsp_parser\bsp_parser.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="antiAC.hpp" />
+    <ClInclude Include="bsp_parser\valve-bsp-parser\bsp_parser.hpp" />
+    <ClInclude Include="bsp_parser\valve-bsp-parser\core\matrix.hpp" />
+    <ClInclude Include="bsp_parser\valve-bsp-parser\core\requirements.hpp" />
+    <ClInclude Include="bsp_parser\valve-bsp-parser\core\valve_structs.hpp" />
     <ClInclude Include="memory.hpp" />
     <ClInclude Include="client.hpp" />
     <ClInclude Include="misc\config.hpp" />
@@ -122,6 +127,7 @@
     <ClInclude Include="player_entity.hpp" />
     <ClInclude Include="misc\xor.hpp" />
     <ClInclude Include="signature\csgo.h" />
+    <ClInclude Include="sound.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Release\hitsoundmaker.exe" />
