@@ -6,8 +6,10 @@
 #include "client.hpp"
 #include "player_entity.hpp"
 #include <iostream>
+#include<chrono>
 
 using namespace offsets;
+using namespace std::chrono;
 
 struct GlowStruct {
 	BYTE base[8];
@@ -260,19 +262,24 @@ public:
 		//TODO
 	}
 
+	uint64_t timeSinceEpochMillisec() {
+		using namespace std::chrono;
+		return duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
+	}
+
 	//get closest enemy
 	void sonar_range(std::vector<std::string> sonar_rangescan_beep_files) {
 		//TODO
-		//1 secs at least, between two played sounds
-		//最低1秒时间间隔
-		int min_interval = 1;
-		int max_interval = 2;
+		//400ms at least, between two played sounds
+		//最低400毫秒时间间隔
+		uint64_t min_interval = 400;
+		uint64_t max_interval = 2 * 1000;
 		//enemies within distance of 300 will trigger sonar
 		//距离在300内才会有声呐
-		int max_threshold_distance = 300;
-		int min_threshold_distance = 10;
+		int max_threshold_distance = 1000;
+		int min_threshold_distance = 20;
 
-		static time_t last_played_sound_time = time(NULL);
+		static uint64_t last_played_sound_time_millis = 0;
 		PlayerEntity enemy;
 		float distance_to_closest_enemy = local_player.get_closest_enemy(enemy);
 
@@ -280,20 +287,37 @@ public:
 			return;
 		}
 
-		time_t current_time = time(NULL);
-		time_t time_delta = current_time - last_played_sound_time;
+		uint64_t current_time = timeSinceEpochMillisec();
+		uint64_t time_delta;
+		if (last_played_sound_time_millis >= current_time) {
+			time_delta = 0;
+		}
+		else {
+			time_delta = current_time - last_played_sound_time_millis;
+		}
 
 		//interval too short
-		if (time_delta < min_interval) {
+		if (time_delta <= min_interval) {
+			//std::cout << "interval too short" << std::endl;
 			return;
 		}
 
+		std::cout << "time_delta: " << time_delta << std::endl;
+
 		sonar_range_scan_sound(sonar_rangescan_beep_files);
+		last_played_sound_time_millis = current_time;
+		std::cout << "Enemy nearby, distance: " << distance_to_closest_enemy <<" time_now: "<< current_time << std::endl;
 		if (distance_to_closest_enemy - min_threshold_distance > 0) {
 			//delay the next sound play time
-			last_played_sound_time += (max_interval - min_interval)
+			uint64_t delay = (max_interval - min_interval)
 				* (distance_to_closest_enemy - min_threshold_distance)
 				/ (max_threshold_distance - min_threshold_distance);
+			if (delay < min_interval) {
+				delay = min_interval;
+			}
+			last_played_sound_time_millis = last_played_sound_time_millis + delay;
+						std::cout << "delay secs: " << delay << std::endl;
+						std::cout << "last_played_sound_time :"<< last_played_sound_time_millis << std::endl;
 		}
 	}
 	
@@ -357,7 +381,7 @@ public:
 		init_sounds_files_of_sonar(sonar_crosshair_beep_files,sonar_rangescan_beep_files);
 
 		while (true) {
-			if (state->game) {				
+			if (state->game) {
 				sonar_crosshair(sonar_crosshair_beep_files);
 				sonar_range(sonar_rangescan_beep_files);
 			}
