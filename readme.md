@@ -16,6 +16,7 @@ CSGO sound based external cheat
 
 ### 4.声呐
 当敌人在一定距离内时播放音效，距离越近声音频率越快
+当敌人在准心附近时播放音效，距离准心越近声音频率越快
 
 ## 使用方法
 下载Release最新版本,拷贝sounds文件夹到应用程序同目录下，可根据个人喜好自行替换.wav文件为自己的声音文件
@@ -57,6 +58,7 @@ Play sound when falshed enemy.
 
 ### 4.Sonar sound
 Play sound when enemies in specific distance from you, beeps faster when enemies get closer
+Play sound when enemies near crosshair, beeps faster when crosshair get closer to enemy
 
 ## Usage
 Download release and copy the folder "sounds" from source to folder where .exe is, you can replace the .wav files with whatever .wav you like
