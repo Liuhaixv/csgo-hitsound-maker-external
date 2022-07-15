@@ -47,6 +47,52 @@ public:
 		local_player = client->get_local_player();
 	}
 
+	struct view_matrix_t {
+		float matrix[16];
+	};
+
+	coords_vector WorldToScreen(const coords_vector pos, struct view_matrix_t matrix, int screen_width, int screen_height) {
+		struct coords_vector out;
+		float _x = matrix.matrix[0] * pos.x + matrix.matrix[1] * pos.y + matrix.matrix[2] * pos.z + matrix.matrix[3];
+		float _y = matrix.matrix[4] * pos.x + matrix.matrix[5] * pos.y + matrix.matrix[6] * pos.z + matrix.matrix[7];
+		out.z = matrix.matrix[12] * pos.x + matrix.matrix[13] * pos.y + matrix.matrix[14] * pos.z + matrix.matrix[15];
+
+		_x *= 1.f / out.z;
+		_y *= 1.f / out.z;
+
+		out.x = screen_width * .5f;
+		out.y = screen_height * .5f;
+
+		out.x += 0.5f * _x * screen_width + 0.5f;
+		out.y -= 0.5f * _y * screen_height + 0.5f;
+
+		return out;
+	}
+
+	float get_min_distance_of_player_to_crosshair(PlayerEntity player, view_matrix_t view_matrix, int width, int height) {
+		float min_distance = 999999999.f;
+
+		//get bone ids 8 7 6 5 4 3 0
+		coords_vector pos_origin = player.get_origin();
+
+		std::vector<coords_vector> pos_of_bones;
+		pos_of_bones.push_back(pos_origin);
+		for (int i = 0; i <= 8; i++) {
+			pos_of_bones.push_back(player.get_bone_position(i));
+		}
+
+		//iterate all players bone position on screen
+		for (coords_vector pos : pos_of_bones) {
+			coords_vector screen_pos = WorldToScreen(pos, view_matrix, width, height);
+			float distance_to_crosshair = sqrt(pow(screen_pos.x - width / 2, 2) + pow(screen_pos.y - height / 2, 2));
+			if (distance_to_crosshair < min_distance) {
+				min_distance = distance_to_crosshair;
+			}
+		}
+
+		return min_distance;
+	}
+
 	bool hit(bool enable_when_spectate = false) {
 		static int oldDamage = 0;
 		static int last_spect_id = local_player.get_observer_target();
@@ -258,8 +304,76 @@ public:
 	}
 
 	//get enemy position(vector3) and transform to screen pos(vector2) using world_to_screen function
-	void sonar_crosshair(std::vector<std::string>  sonar_crosshair_beep_files) {
-		//TODO
+	void sonar_crosshair(hacks_state* state, std::vector<std::string>  sonar_crosshair_beep_files) {
+		//100ms at least, between two played sounds
+		//最低100毫秒时间间隔
+		uint64_t min_interval = 100;
+		uint64_t max_interval = 400;
+		//enemies within distance to crosshair of 200 will trigger sonar
+		//距离准心在200内才会有
+		int max_threshold_distance_to_crosshair = 200;
+		int min_threshold_distance_to_crosshair = 20;
+		static uint64_t last_played_sound_time_millis = 0;
+
+		int localteam = memory->read_mem<int>(memory->read_mem<DWORD>(memory->clientBaseAddr + dwEntityList) + m_iTeamNum);
+		view_matrix_t vm = memory->read_mem<view_matrix_t>(memory->clientBaseAddr + dwViewMatrix);
+		//screen resolution: 2160 1440
+		int screen_width = 2160;
+		int screen_height = 1440;
+
+		uint64_t current_time = timeSinceEpochMillisec();
+		uint64_t time_delta;
+
+
+
+
+		for (int i = 1; i < 64; i++) {
+			if (last_played_sound_time_millis >= current_time) {
+				time_delta = 0;
+			}
+			else {
+				time_delta = current_time - last_played_sound_time_millis;
+			}
+
+			//interval too short
+			if (time_delta <= min_interval) {
+				//std::cout << "interval too short" << std::endl;
+				continue;
+			}
+
+			PlayerEntity pEnt = PlayerEntity(memory, memory->read_mem<DWORD>(memory->clientBaseAddr+ dwEntityList + (i * 0x10)));
+			int team = pEnt.get_team();
+
+			if (team != localteam) {
+				int health = pEnt.get_health();
+
+				coords_vector pos = pEnt.get_origin();
+
+				coords_vector screenpos = WorldToScreen(pos, vm, screen_width, screen_height);
+
+				if (screenpos.z >= 0.01f && health > 0 && health < 101 && !pEnt.get_dormant()) {
+					//get min distance to playerEntity
+					float min_distance = get_min_distance_of_player_to_crosshair(pEnt, vm, screen_width, screen_height);
+
+					if (min_distance < max_threshold_distance_to_crosshair) {
+						sonar_crosshair_sound(sonar_crosshair_beep_files);
+						state->sonar_crosshair_last_beep_time = current_time;
+						last_played_sound_time_millis = current_time;
+
+						//delay the next sound play time
+						uint64_t delay = (max_interval - min_interval)
+							* (min_distance - min_threshold_distance_to_crosshair)
+							/ (max_threshold_distance_to_crosshair - min_threshold_distance_to_crosshair);
+						if (delay < min_interval) {
+							delay = min_interval;
+						}
+						last_played_sound_time_millis = last_played_sound_time_millis + delay;
+						//std::cout << "delay secs: " << delay << std::endl;
+						//std::cout << "last_played_sound_time :" << last_played_sound_time_millis << std::endl;
+					}
+				}
+			}
+		}
 	}
 
 	uint64_t timeSinceEpochMillisec() {
@@ -268,8 +382,7 @@ public:
 	}
 
 	//get closest enemy
-	void sonar_range(std::vector<std::string> sonar_rangescan_beep_files) {
-		//TODO
+	void sonar_range(hacks_state* state, std::vector<std::string> sonar_rangescan_beep_files) {
 		//400ms at least, between two played sounds
 		//最低400毫秒时间间隔
 		uint64_t min_interval = 400;
@@ -297,7 +410,7 @@ public:
 		}
 
 		//interval too short
-		if (time_delta <= min_interval) {
+		if (time_delta <= min_interval || (current_time - state->sonar_crosshair_last_beep_time) < 1000) {
 			//std::cout << "interval too short" << std::endl;
 			return;
 		}
@@ -378,12 +491,12 @@ public:
 		static std::vector<std::string> sonar_crosshair_beep_files;//beep when crosshair near enemy
 		static std::vector<std::string> sonar_rangescan_beep_files;//beep when enemy nearby
 
-		init_sounds_files_of_sonar(sonar_crosshair_beep_files,sonar_rangescan_beep_files);
+		init_sounds_files_of_sonar(sonar_crosshair_beep_files, sonar_rangescan_beep_files);
 
 		while (true) {
 			if (state->game) {
-				sonar_crosshair(sonar_crosshair_beep_files);
-				sonar_range(sonar_rangescan_beep_files);
+				sonar_crosshair(state, sonar_crosshair_beep_files);
+				sonar_range(state, sonar_rangescan_beep_files);
 			}
 			else Sleep(1000);
 

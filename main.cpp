@@ -38,7 +38,7 @@ void disable_quick_edit() {
 
 int main()
 {
-   // AntiAC ac;
+    AntiAC ac;
 	Memory mem;
 	hacks_state state;
 	Client client(&mem);

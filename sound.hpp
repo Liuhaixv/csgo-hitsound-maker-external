@@ -15,12 +15,12 @@ void shuffle_vector(std::vector<std::string>& vector) {
 }
 
 void sonar_crosshair_sound(std::string filename) {
-	PlaySound(((std::string(".\\sounds\\sonar\\crosshair_beep") + filename).c_str()), NULL, SND_ASYNC);
+	PlaySound(((std::string(".\\sounds\\sonar\\crosshair_beep\\") + filename).c_str()), NULL, SND_ASYNC);
 }
 
 void sonar_crosshair_sound(std::vector<std::string>& filenames) {
 	shuffle_vector(filenames);
-	PlaySound(((std::string(".\\sounds\\sonar\\crosshair_beep") + filenames.front()).c_str()), NULL, SND_ASYNC);
+	PlaySound(((std::string(".\\sounds\\sonar\\crosshair_beep\\") + filenames.front()).c_str()), NULL, SND_ASYNC);
 }
 
 void sonar_range_scan_sound(std::string filename) {

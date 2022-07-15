@@ -37,6 +37,9 @@ namespace {
 
 		int round_index = -1;
 		time_t last_time_round_index_changed = time(NULL);
+
+		//准心声呐优先级高于范围声呐
+		uint64_t sonar_crosshair_last_beep_time = 0;
 	};
 }
 #endif
