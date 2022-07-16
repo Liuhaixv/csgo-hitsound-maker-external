@@ -389,7 +389,7 @@ public:
 		uint64_t max_interval = 2 * 1000;
 		//enemies within distance of 300 will trigger sonar
 		//距离在300内才会有声呐
-		int max_threshold_distance = 1000;
+		int max_threshold_distance = 600;
 		int min_threshold_distance = 20;
 
 		static uint64_t last_played_sound_time_millis = 0;
@@ -495,7 +495,7 @@ public:
 
 		while (true) {
 			if (state->game) {
-				sonar_crosshair(state, sonar_crosshair_beep_files);
+				//sonar_crosshair(state, sonar_crosshair_beep_files);
 				sonar_range(state, sonar_rangescan_beep_files);
 			}
 			else Sleep(1000);
