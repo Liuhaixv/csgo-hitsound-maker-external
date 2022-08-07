@@ -38,9 +38,6 @@ If console logs "Game not found", please run the program as `Administrator`, and
 
 
 
-### Downloads
-
-![](https://img.shields.io/github/downloads/Liuhaixv/csgo-hitsound-maker-external/total)
 
 # csgo-hitsound-maker-external
 
@@ -83,4 +80,10 @@ x86 Release
 ## 致谢
 [@Blaumaus](https://github.com/Blaumaus) for his [le_chiffre](https://github.com/Blaumaus/le_chiffre/tree/main/Le_Chiffre)
 
+---
+
+
+### Downloads
+
+![](https://img.shields.io/github/downloads/Liuhaixv/csgo-hitsound-maker-external/total)
 
